@@ -1,0 +1,77 @@
+import React from 'react';
+import swal from 'sweetalert';
+
+const AddCoffee = () => {
+    const handleAddCoffee = (e) => {
+        e.preventDefault();
+
+        const form = e.target;
+        const name = form.name.value;
+        const quantity = form.quantity.value;
+        const supplier = form.supplier.value;
+        const taste = form.taste.value;
+        const category = form.category.value;
+        const details = form.details.value;
+        const photo = form.photo.value;
+
+        const newCoffee = { name, quantity, supplier, taste, category, details, photo };
+        console.log(newCoffee);
+
+        fetch("http://localhost:3000/", {
+            method: "post",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(newCoffee)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+                if (data.insertedId) {
+                    swal("good job", "a new coffee added successfully!", "success");
+                }
+            })
+    }
+
+    return (
+        <div className='w-2/3 mx-auto text-center my-20 bg-gray-100 p-20'>
+            <h2 className='text-2xl font-bold mb-5'>Add a coffee</h2>
+            <form onSubmit={handleAddCoffee}>
+                <div className='grid grid-cols-2 gap-5'>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Coffee Name:
+                        <input type="text" name='name' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Quantity:
+                        <input type="text" name='quantity' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Supplier:
+                        <input type="text" name='supplier' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Taste:
+                        <input type="text" name='taste' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Category:
+                        <input type="text" name='category' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Details:
+                        <input type="text" name='details' className="grow" placeholder="type here..." />
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                        Photo URL:
+                        <input type="text" name='photo' className="grow" placeholder="type here..." />
+                    </label>
+                </div>
+                <input className='btn btn-neutral mt-4' type="submit" value="Add Coffee" />
+            </form>
+        </div>
+    );
+};
+
+export default AddCoffee;
